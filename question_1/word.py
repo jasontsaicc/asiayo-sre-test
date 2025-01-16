@@ -6,10 +6,10 @@ import string
 text = text.lower()  
 text = text.translate(str.maketrans('', '', string.punctuation))  # 移除標點符號
 
-# 第三步：將文章拆成單字
+# 將文章拆成單字
 words = text.split()
 
-# 第四步：統計單字出現次數
+# 統計單字出現次數
 word_count = {}
 for word in words:
     if word in word_count:
@@ -17,7 +17,7 @@ for word in words:
     else:
         word_count[word] = 1
 
-# 第五步：找出出現次數最多的單字
+# 找出出現次數最多的單字
 most_frequent_word = None
 max_count = 0
 for word, count in word_count.items():
@@ -25,5 +25,4 @@ for word, count in word_count.items():
         most_frequent_word = word
         max_count = count
 
-# 第六步：輸出結果
 print(f"{max_count} {most_frequent_word}")
