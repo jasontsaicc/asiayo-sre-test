@@ -1,6 +1,7 @@
 # asiayo-sre-test
 Solutions for AsiaYo Site Reliability Engineer Test
 
+
 ## **question 2: terraform Infrastructure and Kubernetes **
 
 ### **Terraform 架構說明**
@@ -35,3 +36,7 @@ Solutions for AsiaYo Site Reliability Engineer Test
 ### 補充說明
 考量High Availability，EKS 和 VPC 皆使用多 AZ 設置
 Terraform 與 Kubernetes 配置檔都有加上註解，方便面試官快速了解。
+
+## 情境實戰測驗
+
+檔名是scenario-questions.md
