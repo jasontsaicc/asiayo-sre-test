@@ -1,4 +1,4 @@
-# VPC Outputs
+# 將建立後的 VPC, EKS, ec2重要資訊輸出，方便確認資源的ID, Name, Endpoint
 output "vpc_id" {
   description = "VPC ID"
   value       = module.vpc.vpc_id

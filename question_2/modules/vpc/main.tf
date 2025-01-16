@@ -1,4 +1,5 @@
-# VPC
+# 這裡主要負責建立 VPC、Subnet、Internet Gateway、NAT Gateway
+# 架構上是 1 組 VPC + 多AZ的 Public/Private Subnets
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr
   tags = {
@@ -6,6 +7,7 @@ resource "aws_vpc" "this" {
   }
 }
 
+# IGW 讓 Public Subnet 能上網
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
   tags = {
@@ -13,7 +15,7 @@ resource "aws_internet_gateway" "this" {
   }
 }
 
-# Public Subnets (each AZ)
+# Public Subnets
 resource "aws_subnet" "public" {
   count                   = length(local.availability_zones)
   vpc_id                  = aws_vpc.this.id
@@ -25,7 +27,7 @@ resource "aws_subnet" "public" {
   }
 }
 
-# Public Route Table & default route → IGW
+# Public Route Table
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.this.id
   tags = { Name = "${var.project_name}-public-rt" }
@@ -44,7 +46,7 @@ resource "aws_route_table_association" "public_rta" {
   route_table_id = aws_route_table.public_rt.id
 }
 
-# NAT Gateway 
+# NAT Gateway 讓private subnet能單向連網
 resource "aws_eip" "nat_eip" {
   count = length(local.availability_zones)
   domain   = "vpc"
@@ -63,7 +65,7 @@ resource "aws_nat_gateway" "this" {
   depends_on = [aws_internet_gateway.this]
 }
 
-# Private Subnets (each AZ)
+# Private Subnets
 resource "aws_subnet" "private" {
   count                   = length(local.availability_zones)
   vpc_id                  = aws_vpc.this.id
@@ -81,7 +83,7 @@ resource "aws_route_table" "private_rt" {
   tags = { Name = "${var.project_name}-private-rt-${count.index + 1}" }
 }
 
-# Each Private Route → NAT Gateway in same AZ
+# Each Private Route → NAT Gateway 
 resource "aws_route" "private_route_nat" {
   count                   = length(local.availability_zones)
   route_table_id         = aws_route_table.private_rt[count.index].id

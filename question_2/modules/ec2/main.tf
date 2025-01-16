@@ -1,16 +1,15 @@
+#  在 Public Subnet 中建立一台 EC2 instance當做跳板機
 resource "aws_security_group" "ec2_public_sg" {
   name        = "${var.project_name}-ec2-public-sg"
   vpc_id      = var.vpc_id
 
-  # Ingress: Allow SSH from anywhere (adjust as needed)
+  # 建立一個安全群組, 允許 SSH 連線後面需要調整cidr_blocks
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  # Ingress: Allow access to EKS nodes (adjust ports if needed)
   ingress {
     from_port   = 443
     to_port     = 443
@@ -18,7 +17,6 @@ resource "aws_security_group" "ec2_public_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Egress: Allow all outbound traffic
   egress {
     from_port   = 0
     to_port     = 0
@@ -31,6 +29,7 @@ resource "aws_security_group" "ec2_public_sg" {
   }
 }
 
+# 建立 EC2 instance
 resource "aws_instance" "ec2_public" {
   ami           = var.ami_id
   instance_type = var.instance_type                  
