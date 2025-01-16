@@ -1,0 +1,20 @@
+# 使用 Ingress (nginx.ingress.kubernetes.io) 反向代理進入 asiayo-app-service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: asiayo-ingress
+  namespace: asiayo
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: asiayo.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: asiayo-app-service
+            port:
+              number: 80

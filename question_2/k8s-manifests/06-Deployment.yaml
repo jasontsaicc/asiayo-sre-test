@@ -1,0 +1,43 @@
+# 使用nging、建立對應的 ClusterIP Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asiayo-app-deployment
+  namespace: asiayo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: asiayo-app
+  template:
+    metadata:
+      labels:
+        app: asiayo-app
+    spec:
+      containers:
+      - name: asiayo-app
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+          requests:
+            cpu: "250m"
+            memory: "128Mi"
+---
+# Service for Application
+apiVersion: v1
+kind: Service
+metadata:
+  name: asiayo-app-service
+  namespace: asiayo
+spec:
+  type: ClusterIP
+  selector:
+    app: asiayo-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

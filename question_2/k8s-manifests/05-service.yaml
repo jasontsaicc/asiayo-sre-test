@@ -1,0 +1,15 @@
+# Service for MySQL 讓每個 Pod 都可擁有獨立的 DNS
+# Headless Service for StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: asiayo
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: mysql
+  clusterIP: None # Headless Service for StatefulSet
+---

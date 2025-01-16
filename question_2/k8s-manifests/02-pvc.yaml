@@ -1,3 +1,4 @@
+# 向 PV請求，空間
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
